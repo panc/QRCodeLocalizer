@@ -2,8 +2,6 @@ package at.qraz.qrcodelocalizer;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.apache.http.client.ClientProtocolException;
 
@@ -186,9 +184,7 @@ public class Main extends Activity {
         // sets and displays the lat/long when a location is provided
         String latlong = "Breitengrad: " + loc.getLatitude();
         latlong += "\nLängengrad: " + loc.getLongitude();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-        latlong += "\nZeitpunkt: " + sdf.format(new Date(loc.getTime()));
+        latlong += "\nZeitpunkt: " + loc.getTime();
 
         view.setText(latlong);
     }

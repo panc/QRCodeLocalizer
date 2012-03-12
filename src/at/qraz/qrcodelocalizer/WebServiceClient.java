@@ -26,9 +26,15 @@ public class WebServiceClient {
         HttpPut httpPut = null;
         try {
             // send the json string to the webservice
-            httpPut = new HttpPut(createUrl(qrCode));
+            String url = createUrl(qrCode);
+            String json = location.toString();
+            
+            System.out.println(url);
+            System.out.println(json);
+            
+            httpPut = new HttpPut(url);
             httpPut.setHeader("Content-Type", "application/json");
-            httpPut.setEntity(new StringEntity(location.toString()));
+            httpPut.setEntity(new StringEntity(json));
 
             HttpClient httpClient = new DefaultHttpClient();
             HttpResponse response = httpClient.execute(httpPut);
