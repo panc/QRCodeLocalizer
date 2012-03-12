@@ -2,7 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="at.qraz.qrscanner"
       android:versionCode="1"
-      android:versionName="1.0"><application android:icon="@drawable/icon" android:label="@string/app_name">
+      android:versionName="1.0">
+      
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    
+    <uses-sdk android:minSdkVersion="8" />
+    
+   	<application android:icon="@drawable/icon" android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar">
         <activity android:label="@string/app_name" android:name="at.qraz.qrcodelocalizer.Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -10,12 +17,5 @@
             </intent-filter>
         </activity>
         <activity android:name="at.qraz.qrcodelocalizer.SettingsActivity" android:label="@string/app_name" />
-
     </application>
-    
-    <!-- <uses-permission android:name="android.permission.CAMERA"/>-->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    
-    <uses-sdk android:minSdkVersion="8" />
 </manifest>
