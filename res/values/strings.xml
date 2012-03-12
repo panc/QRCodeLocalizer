@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">QR-Code Localizer</string>
+    <string name="initiateScanButtonText">Scan code</string><string name="sendDataButtonText">Send code-position</string>
+    <string name="locationCaptionText">Current position (GPS)</string>
+    <string name="clCaptionText">scanned QR-Code:</string>
+    <string name="noCode">No code scanned.</string>
+    <string name="settingsMenuText">Settings</string>
+    <string name="aboutMenuText">Info</string>
+    <string name="aboutText">QR-Code Localizer powered by qraz.at!</string>
+    <string name="addressSettings">Service - Settings</string>
+    <string name="qrazUrlHint">qraz.at URL</string>
+    <string name="updateUrlHint">Update URL</string><string name="userSettings">User - Settings</string>
+    
+    <string name="userNameHint">Username</string>
+    <string name="passwordHint">Password</string>
+</resources>
