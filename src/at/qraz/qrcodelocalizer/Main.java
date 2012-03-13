@@ -36,7 +36,6 @@ public class Main extends Activity {
     @Override
     protected void onStart() {
         Settings.initialize(this);
-
         super.onStart();
     }
 
@@ -46,7 +45,7 @@ public class Main extends Activity {
 
         setContentView(R.layout.main);
 
-        _infoTextView = (TextView) findViewById(R.id.infoView);
+        _infoTextView = (TextView) findViewById(R.id.submitResultInfoView);
         _resultTextView = (TextView) findViewById(R.id.resultTextView);
         _locationTextView = (TextView) findViewById(R.id.locationView);
         _codeLocationTextView = (TextView) findViewById(R.id.codeLocationView);
@@ -91,7 +90,7 @@ public class Main extends Activity {
                 }
                 else if (result.getFormatName().equals(IntentIntegrator.QR_CODE_TYPES)) {
                     _lastQRCodeContents = result.getContents();
-                    _resultTextView.setText("Contens: " + result.getContents());
+                    _resultTextView.setText("Content\n" + _lastQRCodeContents);
 
                     requestCodeLocation();
                 }
@@ -118,10 +117,10 @@ public class Main extends Activity {
         _locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, onLocationChange);
     }
 
-    public void sendDataButtonClick(View v) {
+    public void submitNewLocationButtonClick(View v) {
         try {
             if (_lastLocation == null || _lastQRCodeContents == null || !_lastQRCodeContents.startsWith(Settings.getQrazUrl())) {
-                _infoTextView.setText("Keine geeigneten Daten zum Ausführen des Updates vorhanden!");
+                _infoTextView.setText(R.string.noDataForUpdate);
                 return;
             }
 
@@ -129,10 +128,10 @@ public class Main extends Activity {
             int statusCode = ws.updateQRCodeLocation(_lastLocation, _lastQRCodeContents);
 
             if (statusCode != HttpURLConnection.HTTP_OK) {
-                _infoTextView.setText("Update nicht erfolgreich (Status: " + statusCode + ")");
+                _infoTextView.setText(R.string.updateFailed + " (Status: " + statusCode + ")");
             }
             else {
-                _infoTextView.setText("Update erfolgreich :-)");
+                _infoTextView.setText(R.string.updateSuccessful);
                 requestCodeLocation();
             }
 
@@ -144,10 +143,11 @@ public class Main extends Activity {
         }
     }
 
-    public void initiateScanButtonClick(View v) {
+    public void scanButtonClick(View v) {
         _lastQRCodeContents = "";
         _resultTextView.setText("");
         _infoTextView.setText("");
+        
         IntentIntegrator.initiateScan(this);
     }
 
@@ -181,11 +181,10 @@ public class Main extends Activity {
     }
 
     private void setLocationText(TextView view, CodeLocation loc) {
-        // sets and displays the lat/long when a location is provided
-        String latlong = "Breitengrad: " + loc.getLatitude();
-        latlong += "\nLängengrad: " + loc.getLongitude();
-        latlong += "\nZeitpunkt: " + loc.getTime();
+        String text = "Breitengrad: \t\t" + loc.getLatitude();
+        text += "\nLängengrad: \t" + loc.getLongitude();
+        text += "\nZeitpunkt: \t\t" + loc.getTime();
 
-        view.setText(latlong);
+        view.setText(text);
     }
 }

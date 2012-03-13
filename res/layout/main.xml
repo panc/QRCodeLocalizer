@@ -11,11 +11,34 @@
     	android:layout_width="fill_parent"
     	android:layout_height="wrap_content" >
 	    
-		<TextView android:id="@+id/qrCodeInfoHeadline"
-	        android:text="@string/clCaptionText"
+		<TextView android:id="@+id/locationHeadline"
+	        android:text="@string/locationHeadlineText"
 	        android:textColor="#4E95D4"
 	        android:textSize="20sp"
+	        android:layout_marginLeft="3dip"
 	        android:layout_marginTop="5dip"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"/>
+	    
+	    <View android:background="#4E95D4" 
+	        android:layout_width = "fill_parent" 
+	        android:layout_height="1dip"
+	        android:layout_marginBottom="15dip"/>
+	    
+	    <TextView  
+		    android:id="@+id/locationView"
+		    android:textColor="#808080"
+		    android:layout_marginLeft="3dip"
+	        android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" />
+	    
+	    
+		
+		<TextView android:id="@+id/qrCodeInfoHeadline"
+	        android:text="@string/scanQRCodeHeadlineText"
+	        android:textColor="#4E95D4"
+	        android:textSize="20sp"
+	        android:layout_marginTop="15dip"
 	        android:layout_marginLeft="3dip"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"/>
@@ -25,29 +48,37 @@
 	        android:layout_height="1dip"
 	        android:layout_marginBottom="15dip"/>
 	    
-	    <Button
-		    android:layout_width="wrap_content" 
-		    android:layout_height="wrap_content" 
-		    android:text="@string/initiateScanButtonText"
-		    android:paddingTop="2sp"
-		    android:paddingBottom="2sp"
-		    android:paddingLeft="5sp"
-		    android:onClick="initiateScanButtonClick" />
+	    <RelativeLayout android:layout_width="fill_parent" 
+                android:layout_height="wrap_content">
+		    
+		    <Button
+			    android:id="@+id/scanButton"
+			    android:layout_width="wrap_content" 
+			    android:layout_height="wrap_content" 
+			    android:text="@string/scanButtonText"
+			    android:onClick="scanButtonClick" />
+		    
+		    <TextView  
+			    android:id="@+id/resultTextView"
+			    android:textColor="#808080"
+		    	android:layout_marginLeft="3dip"
+		        android:layout_width="fill_parent" 
+			    android:layout_height="wrap_content"
+			    android:layout_toRightOf="@id/scanButton" />
+		    
+		    <TextView  
+		        android:id="@+id/codeLocationView"
+			    android:textColor="#808080"
+		    	android:layout_marginLeft="3dip"
+		        android:layout_width="fill_parent" 
+			    android:layout_height="wrap_content"
+			    android:layout_below="@id/scanButton" />
+		    
+	    </RelativeLayout>
 	    
-	    <TextView  
-		    android:id="@+id/resultTextView"
-		    android:layout_marginLeft="3dip"
-	        android:layout_width="fill_parent" 
-		    android:layout_height="wrap_content" />
 	    
-	    <TextView  
-	        android:id="@+id/codeLocationView"
-		    android:layout_marginLeft="3dip"
-	        android:layout_width="fill_parent" 
-		    android:layout_height="wrap_content" />
-	    
-	    <TextView android:id="@+id/locationHeadline"
-	        android:text="@string/locationCaptionText"
+	    <TextView android:id="@+id/submitNewLocationHeadline"
+	        android:text="@string/submitNewLocationHeadlineText"
 	        android:textColor="#4E95D4"
 	        android:textSize="20sp"
 	        android:layout_marginLeft="3dip"
@@ -60,20 +91,15 @@
 	        android:layout_height="1dip"
 	        android:layout_marginBottom="15dip"/>
 	    
-	    <TextView  
-		    android:id="@+id/locationView"
-		    android:layout_marginLeft="3dip"
-	        android:layout_width="fill_parent" 
-		    android:layout_height="wrap_content" />
-	    
 	     <Button
 		    android:layout_width="wrap_content" 
 		    android:layout_height="wrap_content" 
-		    android:text="@string/sendDataButtonText"
-		    android:onClick="sendDataButtonClick" />
+		    android:text="@string/submitNewLocationButtonText"
+		    android:onClick="submitNewLocationButtonClick" />
 	    
 		<TextView  
-		    android:id="@+id/infoView" 
+		    android:id="@+id/submitResultInfoView" 
+		    android:textColor="#808080"
 		    android:layout_marginLeft="3dip"
 		    android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content" />

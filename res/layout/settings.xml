@@ -25,6 +25,14 @@
 	        android:layout_height="1dip"
 	        android:layout_marginBottom="10dip" />
 		
+	    <TextView android:id="@+id/qrazUrlTextView"
+		    android:textColor="#808080"
+		    android:paddingLeft="1dip"
+	    	android:layout_marginLeft="5dip"
+	        android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content"
+		    android:text="@string/qrazUrlHint" />
+    
 	    <EditText android:id="@+id/qrazUrl"
 	        android:hint="@string/qrazUrlHint"
 	        android:inputType="textUri"
@@ -32,7 +40,14 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"/>
 	    
-	    <EditText android:id="@+id/updateUrl"
+	    <TextView android:id="@+id/updateUrlTextView"
+		    android:textColor="#808080"
+		    android:layout_marginLeft="5dip"
+	        android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content"
+		    android:text="@string/updateUrlHint" />
+    	
+    	<EditText android:id="@+id/updateUrl"
 	        android:hint="@string/updateUrlHint"
 	        android:inputType="textUri"
 	        android:layout_marginLeft="3dip"

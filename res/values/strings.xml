@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">QR-Code Localizer</string>
-    <string name="initiateScanButtonText">Scan code</string><string name="sendDataButtonText">Send code-position</string>
-    <string name="locationCaptionText">Current position (GPS)</string>
-    <string name="clCaptionText">scanned QR-Code:</string>
-    <string name="noCode">No code scanned.</string>
+    <string name="scanButtonText">Scan code</string><string name="submitNewLocationButtonText">Send New Location</string>
+    <string name="locationHeadlineText">1. Current position (GPS)</string>
+    <string name="scanQRCodeHeadlineText">2. Scanned QR-Code</string>
     <string name="settingsMenuText">Settings</string>
     <string name="aboutMenuText">Info</string>
     <string name="aboutText">QR-Code Localizer powered by qraz.at!</string>
     <string name="addressSettings">Service - Settings</string>
-    <string name="qrazUrlHint">qraz.at URL</string>
-    <string name="updateUrlHint">Update URL</string><string name="userSettings">User - Settings</string>
-    
+    <string name="qrazUrlHint">QRAZ.AT URL</string>
+    <string name="updateUrlHint">UPDATE URL</string><string name="userSettings">User - Settings</string>    
     <string name="userNameHint">Username</string>
     <string name="passwordHint">Password</string>
+    <string name="updateSuccessful">Update was successful :-)</string>
+    <string name="updateFailed">Update failed :-(</string>
+    <string name="submitNewLocationHeadlineText">3. Submit New Location</string>
+    <string name="noDataForUpdate">No data for update available!</string>
 </resources>
