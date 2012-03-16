@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="headlineColor">#DE7518</color>
-    <color name="BackgroundColor">#ffffff</color>
-    <color name="TextColor">#808080</color>
+    <color name="headlineColor">#DE9918</color>
+    <color name="BackgroundColor">#333333</color>
+    <color name="TextColor">#B3B3B3</color>
     
 </resources>
