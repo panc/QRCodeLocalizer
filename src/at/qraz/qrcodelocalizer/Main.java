@@ -5,7 +5,6 @@ import java.net.HttpURLConnection;
 
 import org.apache.http.client.ClientProtocolException;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
@@ -19,10 +18,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import at.qraz.qrscanner.R;
 
+import com.google.android.maps.MapActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class Main extends Activity {
+public class Main extends MapActivity {
 
     private TextView _resultTextView;
     private TextView _locationTextView;
@@ -33,6 +33,11 @@ public class Main extends Activity {
     private String _lastQRCodeContents;
     private CodeLocation _lastLocation;
 
+    @Override
+    protected boolean isRouteDisplayed() {
+        return false;
+    }
+    
     @Override
     protected void onStart() {
         Settings.initialize(this);
@@ -49,7 +54,7 @@ public class Main extends Activity {
         _resultTextView = (TextView) findViewById(R.id.resultTextView);
         _locationTextView = (TextView) findViewById(R.id.locationView);
         _codeLocationTextView = (TextView) findViewById(R.id.codeLocationView);
-
+        
         _locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         Location l = _locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
         _lastLocation = new CodeLocation(l.getLongitude(), l.getLatitude(), l.getTime());
@@ -70,6 +75,11 @@ public class Main extends Activity {
             case R.id.settingsMenu:
                 Intent i = new Intent(this, SettingsActivity.class);
                 startActivity(i);
+                break;
+                
+            case R.id.locationPreviewMenu:
+                Intent map = new Intent(this, LocationPreviewActivity.class);
+                startActivity(map);
                 break;
 
             case R.id.aboutMenu:
@@ -149,6 +159,10 @@ public class Main extends Activity {
         _infoTextView.setText("");
         
         IntentIntegrator.initiateScan(this);
+    }
+    
+    public void showMapButtonClick(View v) {
+        // todo
     }
 
     LocationListener onLocationChange = new LocationListener() {

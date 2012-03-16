@@ -32,7 +32,20 @@
 	        android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content" />
 	    
+	     <Button
+			    android:id="@+id/showMapButton"
+			    android:layout_width="wrap_content" 
+			    android:layout_height="wrap_content" 
+			    android:text="@string/scanButtonText"
+			    android:onClick="showMapButtonClick" />
 	    
+	     
+	     <com.google.android.maps.MapView
+		    android:id="@+id/mapview"
+		    android:layout_width="fill_parent"
+		    android:layout_height="100dip"
+		    android:clickable="true"
+		    android:apiKey="@string/GoogleMapsAPIKey_Debug" />
 		
 		<TextView android:id="@+id/qrCodeInfoHeadline"
 	        android:text="@string/scanQRCodeHeadlineText"

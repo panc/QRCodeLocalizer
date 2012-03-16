@@ -3,19 +3,21 @@
       package="at.qraz.qrscanner"
       android:versionCode="102"
       android:versionName="1.0.2">
-      
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+     	
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     
-    <uses-sdk android:minSdkVersion="8" />
-    
    	<application android:icon="@drawable/icon" android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar">
+   	    
+   	    <uses-library android:name="com.google.android.maps" />
+   	    
         <activity android:label="@string/app_name" android:name="at.qraz.qrcodelocalizer.Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="at.qraz.qrcodelocalizer.SettingsActivity" android:label="@string/app_name" />
+        <activity android:name="at.qraz.qrcodelocalizer.SettingsActivity" android:label="@string/app_name" />        
+        <activity android:name="at.qraz.qrcodelocalizer.LocationPreviewActivity" android:label="@string/app_name" />
     </application>
 </manifest>

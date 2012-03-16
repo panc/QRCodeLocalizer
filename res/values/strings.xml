@@ -16,4 +16,7 @@
     <string name="updateFailed">Update failed :-(</string>
     <string name="submitNewLocationHeadlineText">3. Submit New Location</string>
     <string name="noDataForUpdate">No data for update available!</string>
+    <string name="locationPreviewText">Location Preview</string>
+    <string name="GoogleMapsAPIKey">0XDVMvfQ4hPX8iimvIVVZAON3c4WJ2KTQYkW1qA</string>
+    <string name="GoogleMapsAPIKey_Debug">0XDVMvfQ4hPVZnUB8HFFRzNWo9Trv92xmbGuNHg</string>
 </resources>
