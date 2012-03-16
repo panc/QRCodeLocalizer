@@ -24,11 +24,11 @@ public class Settings {
     }
 
     public static String getQrazUrl() {
-        return sPrefs.getString(QRAZ_URL, "");
+        return sPrefs.getString(QRAZ_URL, "http://dev.qraz.at/");
     }
 
     public static String getUpdateUrl() {
-        return sPrefs.getString(UPDATE_URL, "");
+        return sPrefs.getString(UPDATE_URL, "http://dev.qraz.at/api/code/");
     }
 
     public static String getUserName() {
