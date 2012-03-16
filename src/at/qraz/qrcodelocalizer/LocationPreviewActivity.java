@@ -6,7 +6,7 @@ import at.qraz.qrscanner.R;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 
-public class LocationPreviewActivity extends MapActivity{
+public class LocationPreviewActivity extends MapActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -16,9 +16,10 @@ public class LocationPreviewActivity extends MapActivity{
 
         MapView mapView = (MapView) findViewById(R.id.mapview);
         mapView.setBuiltInZoomControls(true);
+
+        MapViewHelper.setToCurrentLocation(mapView, MapViewHelper.ZOOM_LEVEL_LARGE);
     }
 
-    
     @Override
     protected boolean isRouteDisplayed() {
         return false;

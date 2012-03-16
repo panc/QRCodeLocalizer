@@ -19,6 +19,7 @@ import android.widget.Toast;
 import at.qraz.qrscanner.R;
 
 import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -56,10 +57,15 @@ public class Main extends MapActivity {
         _codeLocationTextView = (TextView) findViewById(R.id.codeLocationView);
         
         _locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        
+        MapViewHelper.initialize(_locationManager);
         Location l = _locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-        _lastLocation = new CodeLocation(l.getLongitude(), l.getLatitude(), l.getTime());
 
+        _lastLocation = new CodeLocation(l.getLongitude(), l.getLatitude(), l.getTime());
         setLocationText(_locationTextView, _lastLocation);
+
+        MapView map = (MapView)findViewById(R.id.mapview);
+        MapViewHelper.setToCurrentLocation(map, MapViewHelper.ZOOM_LEVEL_SMALL);
     }
 
     @Override
