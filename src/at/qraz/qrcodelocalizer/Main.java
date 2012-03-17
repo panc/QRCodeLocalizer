@@ -65,6 +65,7 @@ public class Main extends MapActivity {
         setLocationText(_locationTextView, _lastLocation);
 
         MapView map = (MapView)findViewById(R.id.mapview);
+        map.setClickable(false);
         MapViewHelper.setToCurrentLocation(map, MapViewHelper.ZOOM_LEVEL_SMALL);
     }
 
