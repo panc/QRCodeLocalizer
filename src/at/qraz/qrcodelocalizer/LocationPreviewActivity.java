@@ -16,6 +16,8 @@ import com.google.android.maps.MyLocationOverlay;
 
 public class LocationPreviewActivity extends MapActivity {
 
+    private final int DIALOG_SHOW_MAPTYPE_SELECTION = 1;
+    
     private MyLocationOverlay _myLocationOverlay;
     private MapView _mapView; 
 
@@ -67,7 +69,7 @@ public class LocationPreviewActivity extends MapActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.toggleMapType:
-                showDialog(1);
+                showDialog(DIALOG_SHOW_MAPTYPE_SELECTION);
                 break;
         }
 
@@ -88,15 +90,17 @@ public class LocationPreviewActivity extends MapActivity {
 
     private Dialog createMapTypeSelection() {
         final String[] items = { getString(R.string.map), getString(R.string.satellite)};
+
+        int selectedItem = _mapView.isSatellite() ? 1 : 0;
         
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.mapTypeSelection));
-        builder.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+        builder.setSingleChoiceItems(items, selectedItem, new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int item) {
 
                 _mapView.setSatellite(item == 1);                
-                dismissDialog(1);
+                dismissDialog(DIALOG_SHOW_MAPTYPE_SELECTION);
             }
         });
 
