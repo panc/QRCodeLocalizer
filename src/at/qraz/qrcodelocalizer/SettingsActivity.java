@@ -24,7 +24,7 @@ public class SettingsActivity extends Activity {
         mPassword = (EditText) findViewById(R.id.password);
         
         mQrazUrl.setText(Settings.getQrazUrl());
-        mUpdateUrl.setText(Settings.getUpdateUrl());
+        mUpdateUrl.setText(Settings.getAPIUrl());
         mUserName.setText(Settings.getUserName());
         mPassword.setText(Settings.getPassword());
     }

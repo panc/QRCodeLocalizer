@@ -45,10 +45,10 @@
 		    android:layout_marginLeft="5dip"
 	        android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content"
-		    android:text="@string/updateUrlHint" />
+		    android:text="@string/apiUrlHint" />
     	
     	<EditText android:id="@+id/updateUrl"
-	        android:hint="@string/updateUrlHint"
+	        android:hint="@string/apiUrlHint"
 	        android:inputType="textUri"
 	        android:layout_marginLeft="3dip"
 	        android:layout_width="fill_parent"

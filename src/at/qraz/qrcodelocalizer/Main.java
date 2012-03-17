@@ -30,7 +30,7 @@ public class Main extends MapActivity {
     private TextView _codeLocationTextView;
     private TextView _infoTextView;
     private MapView _mapView;
-    
+
     private LocationManager _locationManager;
 
     private String _lastQRCodeContents;
@@ -40,7 +40,7 @@ public class Main extends MapActivity {
     protected boolean isRouteDisplayed() {
         return false;
     }
-    
+
     @Override
     protected void onStart() {
         Settings.initialize(this);
@@ -57,17 +57,17 @@ public class Main extends MapActivity {
         _resultTextView = (TextView) findViewById(R.id.resultTextView);
         _locationTextView = (TextView) findViewById(R.id.locationView);
         _codeLocationTextView = (TextView) findViewById(R.id.codeLocationView);
-        
+
         _locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        
+
         MapViewHelper.initialize(_locationManager);
         Location l = _locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
 
         _lastLocation = new CodeLocation(l.getLongitude(), l.getLatitude(), l.getTime());
         setLocationText(_locationTextView, _lastLocation);
 
-        _mapView = (MapView)findViewById(R.id.smallMapView);
-        
+        _mapView = (MapView) findViewById(R.id.smallMapView);
+
         MapViewHelper.setToCurrentLocation(_mapView, MapViewHelper.ZOOM_LEVEL_SMALL);
     }
 
@@ -85,7 +85,7 @@ public class Main extends MapActivity {
                 Intent i = new Intent(this, SettingsActivity.class);
                 startActivity(i);
                 break;
-                
+
             case R.id.locationPreviewMenu:
                 Intent map = new Intent(this, LocationPreviewActivity.class);
                 startActivity(map);
@@ -133,11 +133,12 @@ public class Main extends MapActivity {
     @Override
     public void onResume() {
         super.onResume();
-        
+
         _locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, onLocationChange);
     }
 
     public void submitNewLocationButtonClick(View v) {
+
         try {
             if (_lastLocation == null || _lastQRCodeContents == null || !_lastQRCodeContents.startsWith(Settings.getQrazUrl())) {
                 _infoTextView.setText(R.string.noDataForUpdate);
@@ -167,10 +168,10 @@ public class Main extends MapActivity {
         _lastQRCodeContents = "";
         _resultTextView.setText("");
         _infoTextView.setText("");
-        
+
         IntentIntegrator.initiateScan(this);
     }
-    
+
     public void showMapButtonClick(View v) {
         // todo
     }
@@ -179,7 +180,7 @@ public class Main extends MapActivity {
         public void onLocationChanged(Location loc) {
             _lastLocation = new CodeLocation(loc.getLongitude(), loc.getLatitude(), loc.getTime());
             setLocationText(_locationTextView, _lastLocation);
-            
+
             MapViewHelper.setToCurrentLocation(_mapView, MapViewHelper.ZOOM_LEVEL_SMALL, loc);
         }
 
@@ -203,7 +204,10 @@ public class Main extends MapActivity {
         WebServiceClient ws = new WebServiceClient();
         CodeLocation location = ws.getQRCodeLocation(_lastQRCodeContents);
 
-        setLocationText(_codeLocationTextView, location);
+        if (location == null)
+            _codeLocationTextView.setText(getString(R.string.requestFailed));
+        else
+            setLocationText(_codeLocationTextView, location);
     }
 
     private void setLocationText(TextView view, CodeLocation loc) {
