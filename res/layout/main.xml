@@ -34,10 +34,10 @@
 	    
 	     
 	     <com.google.android.maps.MapView
-		    android:id="@+id/mapview"
+		    android:id="@+id/smallMapView"
 		    android:layout_width="fill_parent"
 		    android:layout_height="100dip"
-		    android:clickable="true"
+		    android:clickable="false"
 		    android:apiKey="@string/GoogleMapsAPIKey_Debug" />
 		
 		<TextView android:id="@+id/qrCodeInfoHeadline"

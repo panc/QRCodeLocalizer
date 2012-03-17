@@ -22,12 +22,19 @@ public class MapViewHelper {
     public static void setToCurrentLocation(MapView map, int zoomLevel) {
 
         Location l = _locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+        setToCurrentLocation(map, zoomLevel, l);
+    }
+    
+    public static void setToCurrentLocation(MapView map, int zoomLevel, Location location) {
 
-        double latitude = l.getLatitude();
-        double longitude = l.getLongitude();
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
         
+        System.out.println("Latitude: " + latitude);
+        System.out.println("Longitude: " + longitude);
+
         MapController controller = map.getController();
-        controller.setCenter(new GeoPoint((int) (latitude * 1E6), (int) (longitude * 1E6)));
-        controller.setZoom(zoomLevel);        
+        controller.setZoom(zoomLevel);
+        controller.setCenter(new GeoPoint((int) (latitude * 1E6), (int) (longitude * 1E6)));        
     }
 }

@@ -29,6 +29,8 @@ public class Main extends MapActivity {
     private TextView _locationTextView;
     private TextView _codeLocationTextView;
     private TextView _infoTextView;
+    private MapView _mapView;
+    
     private LocationManager _locationManager;
 
     private String _lastQRCodeContents;
@@ -64,9 +66,9 @@ public class Main extends MapActivity {
         _lastLocation = new CodeLocation(l.getLongitude(), l.getLatitude(), l.getTime());
         setLocationText(_locationTextView, _lastLocation);
 
-        MapView map = (MapView)findViewById(R.id.mapview);
-        map.setClickable(false);
-        MapViewHelper.setToCurrentLocation(map, MapViewHelper.ZOOM_LEVEL_SMALL);
+        _mapView = (MapView)findViewById(R.id.smallMapView);
+        
+        MapViewHelper.setToCurrentLocation(_mapView, MapViewHelper.ZOOM_LEVEL_SMALL);
     }
 
     @Override
@@ -131,6 +133,7 @@ public class Main extends MapActivity {
     @Override
     public void onResume() {
         super.onResume();
+        
         _locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, onLocationChange);
     }
 
@@ -145,10 +148,10 @@ public class Main extends MapActivity {
             int statusCode = ws.updateQRCodeLocation(_lastLocation, _lastQRCodeContents);
 
             if (statusCode != HttpURLConnection.HTTP_OK) {
-                _infoTextView.setText(R.string.updateFailed + " (Status: " + statusCode + ")");
+                _infoTextView.setText(getString(R.string.updateFailed) + " (Status: " + statusCode + ")");
             }
             else {
-                _infoTextView.setText(R.string.updateSuccessful);
+                _infoTextView.setText(getString(R.string.updateSuccessful));
                 requestCodeLocation();
             }
 
@@ -176,6 +179,8 @@ public class Main extends MapActivity {
         public void onLocationChanged(Location loc) {
             _lastLocation = new CodeLocation(loc.getLongitude(), loc.getLatitude(), loc.getTime());
             setLocationText(_locationTextView, _lastLocation);
+            
+            MapViewHelper.setToCurrentLocation(_mapView, MapViewHelper.ZOOM_LEVEL_SMALL, loc);
         }
 
         public void onProviderDisabled(String provider) {
