@@ -1,9 +1,10 @@
-package at.qraz.qrcodelocalizer;
+package at.qraz.qrcodelocalizer.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.EditText;
-import at.qraz.qrscanner.R;
+import at.qraz.qrcodelocalizer.R;
+import at.qraz.qrcodelocalizer.Settings;
 
 public class SettingsActivity extends Activity {
     

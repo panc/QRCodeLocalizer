@@ -1,4 +1,4 @@
-package at.qraz.qrcodelocalizer;
+package at.qraz.qrcodelocalizer.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -8,7 +8,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import at.qraz.qrscanner.R;
+import at.qraz.qrcodelocalizer.MapViewHelper;
+import at.qraz.qrcodelocalizer.R;
 
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;

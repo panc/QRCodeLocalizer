@@ -1,4 +1,4 @@
-package at.qraz.qrcodelocalizer;
+package at.qraz.qrcodelocalizer.activity;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -16,7 +16,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-import at.qraz.qrscanner.R;
+import at.qraz.qrcodelocalizer.CodeLocation;
+import at.qraz.qrcodelocalizer.MapViewHelper;
+import at.qraz.qrcodelocalizer.R;
+import at.qraz.qrcodelocalizer.Settings;
+import at.qraz.qrcodelocalizer.WebServiceClient;
 
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
