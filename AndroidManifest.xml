@@ -11,13 +11,13 @@
    	    
    	    <uses-library android:name="com.google.android.maps" />
    	    
-        <activity android:label="@string/app_name" android:name="at.qraz.qrcodelocalizer.Main">
+        <activity android:label="@string/app_name" android:name="at.qraz.qrcodelocalizer.Main" android:process="Main.Process">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="at.qraz.qrcodelocalizer.SettingsActivity" android:label="@string/app_name" />        
-        <activity android:name="at.qraz.qrcodelocalizer.LocationPreviewActivity" android:label="@string/app_name" />
+        <activity android:name="at.qraz.qrcodelocalizer.SettingsActivity" android:label="@string/app_name" android:process="Main.Process"/>        
+        <activity android:name="at.qraz.qrcodelocalizer.LocationPreviewActivity" android:label="@string/app_name" android:process="LargeMap.Preview"/>
     </application>
 </manifest>
