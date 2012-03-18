@@ -29,16 +29,15 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class Main extends MapActivity {
 
-    private TextView _resultTextView;
-    private TextView _locationTextView;
-    private TextView _codeLocationTextView;
-    private TextView _infoTextView;
+    private TextView _qrCodeContentsTextView;
+    private TextView _gpsLocationTextView;
+    private TextView _qrCodeLocationTextView;
     private MapView _mapView;
 
     private LocationManager _locationManager;
 
-    private String _lastQRCodeContents;
-    private CodeLocation _lastLocation;
+    private CodeLocation _qrCodeLocation;
+    private CodeLocation _gpsLocation;
 
     @Override
     protected boolean isRouteDisplayed() {
@@ -57,22 +56,48 @@ public class Main extends MapActivity {
 
         setContentView(R.layout.main);
 
-        _infoTextView = (TextView) findViewById(R.id.submitResultInfoView);
-        _resultTextView = (TextView) findViewById(R.id.resultTextView);
-        _locationTextView = (TextView) findViewById(R.id.locationView);
-        _codeLocationTextView = (TextView) findViewById(R.id.codeLocationView);
-
+        _gpsLocationTextView = (TextView) findViewById(R.id.gpsLocationTextView);
+        _qrCodeLocationTextView = (TextView) findViewById(R.id.qrCodeLocationTextView);
+        _qrCodeContentsTextView = (TextView) findViewById(R.id.qrCodeContentsTextView);
+        
         _locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         MapViewHelper.initialize(_locationManager);
         Location l = _locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
 
-        _lastLocation = new CodeLocation(l.getLongitude(), l.getLatitude(), l.getTime());
-        setLocationText(_locationTextView, _lastLocation);
+        _gpsLocation = new CodeLocation(l.getLongitude(), l.getLatitude(), l.getTime());
+        setLocationText(_gpsLocationTextView, _gpsLocation);
 
         _mapView = (MapView) findViewById(R.id.smallMapView);
-
         MapViewHelper.setToCurrentLocation(_mapView, MapViewHelper.ZOOM_LEVEL_SMALL);
+
+        Object data = getLastNonConfigurationInstance();
+        if (data != null && data instanceof CodeLocation) {
+
+            _qrCodeLocation = (CodeLocation)data;
+            _qrCodeContentsTextView.setText(_qrCodeLocation.getQRCodeContents());    
+            setLocationText(_qrCodeLocationTextView, _qrCodeLocation);
+        }
+    }
+
+    // pauses listener while app is inactive
+    @Override
+    public void onPause() {
+        super.onPause();
+        _locationManager.removeUpdates(onLocationChange);
+    }
+
+    // reactivates listener when app is resumed
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        _locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, onLocationChange);
+    }
+
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+        return _qrCodeLocation;
     }
 
     @Override
@@ -109,81 +134,81 @@ public class Main extends MapActivity {
             IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
             if (result != null) {
                 if (result.getContents() == null && result.getFormatName() == null) {
-                    _resultTextView.setText("Cancled");
+                    showToast("Scanning Cancled!");
                 }
                 else if (result.getFormatName().equals(IntentIntegrator.QR_CODE_TYPES)) {
-                    _lastQRCodeContents = result.getContents();
-                    _resultTextView.setText("Content\n" + _lastQRCodeContents);
+                    String qrCodeContents = result.getContents();
+                    _qrCodeContentsTextView.setText(qrCodeContents);
 
-                    requestCodeLocation();
+                    requestAndSetQRCodeLocation(qrCodeContents);
                 }
             }
         }
         catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, e.getMessage(), 5000).show();
-            _infoTextView.setText(e.toString());
+            showToast(e.toString());
         }
     }
 
-    // pauses listener while app is inactive
-    @Override
-    public void onPause() {
-        super.onPause();
-        _locationManager.removeUpdates(onLocationChange);
-    }
-
-    // reactivates listener when app is resumed
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        _locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, onLocationChange);
-    }
-
     public void submitNewLocationButtonClick(View v) {
-
         try {
-            if (_lastLocation == null || _lastQRCodeContents == null || !_lastQRCodeContents.startsWith(Settings.getQrazUrl())) {
-                _infoTextView.setText(R.string.noDataForUpdate);
+            if (_gpsLocation == null || _qrCodeLocation !=  null) {
+                showToast(getString(R.string.noDataForUpdate));
                 return;
             }
 
             WebServiceClient ws = new WebServiceClient();
-            int statusCode = ws.updateQRCodeLocation(_lastLocation, _lastQRCodeContents);
+            int statusCode = ws.updateQRCodeLocation(_gpsLocation, _qrCodeLocation.getQRCodeContents());
 
             if (statusCode != HttpURLConnection.HTTP_OK) {
-                _infoTextView.setText(getString(R.string.updateFailed) + " (Status: " + statusCode + ")");
+                showToast(getString(R.string.updateFailed) + " (Status: " + statusCode + ")");
             }
             else {
-                _infoTextView.setText(getString(R.string.updateSuccessful));
-                requestCodeLocation();
+                showToast(getString(R.string.updateSuccessful));
+                requestAndSetQRCodeLocation(_qrCodeLocation.getQRCodeContents());
             }
 
         }
         catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, e.getMessage(), 5000).show();
-            _infoTextView.setText(e.toString());
+            showToast(e.toString());
         }
     }
 
     public void scanButtonClick(View v) {
-        _lastQRCodeContents = "";
-        _resultTextView.setText("");
-        _infoTextView.setText("");
-
+        _qrCodeContentsTextView.setText("");        
         IntentIntegrator.initiateScan(this);
     }
 
-    public void showMapButtonClick(View v) {
-        // todo
+    /*
+     * reqest the current location of the qr-code from the server
+     */
+    private void requestAndSetQRCodeLocation(String qrCodeContents) throws ClientProtocolException, IOException {
+        WebServiceClient ws = new WebServiceClient();
+        _qrCodeLocation = ws.getQRCodeLocation(qrCodeContents);
+
+        if (_qrCodeLocation == null)
+            _qrCodeLocationTextView.setText(getString(R.string.requestFailed));
+        else
+            setLocationText(_qrCodeLocationTextView, _qrCodeLocation);
+    }
+
+    private void setLocationText(TextView view, CodeLocation loc) {
+        String text = "Breitengrad: \t\t" + loc.getLatitude();
+        text += "\nLängengrad: \t" + loc.getLongitude();
+        text += "\nZeitpunkt: \t\t" + loc.getTime();
+
+        view.setText(text);
+    }
+    
+    private void showToast(String message){
+        Toast.makeText(this, message, 5000).show();
     }
 
     LocationListener onLocationChange = new LocationListener() {
         public void onLocationChanged(Location loc) {
-            _lastLocation = new CodeLocation(loc.getLongitude(), loc.getLatitude(), loc.getTime());
-            setLocationText(_locationTextView, _lastLocation);
+            _gpsLocation = new CodeLocation(loc.getLongitude(), loc.getLatitude(), loc.getTime());
+            setLocationText(_gpsLocationTextView, _gpsLocation);
 
             MapViewHelper.setToCurrentLocation(_mapView, MapViewHelper.ZOOM_LEVEL_SMALL, loc);
         }
@@ -200,25 +225,4 @@ public class Main extends MapActivity {
             // required for interface, not used
         }
     };
-
-    /*
-     * reqest the current location of the qr-code from the server
-     */
-    private void requestCodeLocation() throws ClientProtocolException, IOException {
-        WebServiceClient ws = new WebServiceClient();
-        CodeLocation location = ws.getQRCodeLocation(_lastQRCodeContents);
-
-        if (location == null)
-            _codeLocationTextView.setText(getString(R.string.requestFailed));
-        else
-            setLocationText(_codeLocationTextView, location);
-    }
-
-    private void setLocationText(TextView view, CodeLocation loc) {
-        String text = "Breitengrad: \t\t" + loc.getLatitude();
-        text += "\nLängengrad: \t" + loc.getLongitude();
-        text += "\nZeitpunkt: \t\t" + loc.getTime();
-
-        view.setText(text);
-    }
 }

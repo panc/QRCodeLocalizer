@@ -73,7 +73,7 @@ public class WebServiceClient {
                 instream.close();
             }
 
-            return new CodeLocation(sb.toString());
+            return new CodeLocation(qrCode, sb.toString());
         }
         finally {
             if (httpGet != null)
