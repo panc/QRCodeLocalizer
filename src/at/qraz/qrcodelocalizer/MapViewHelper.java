@@ -27,8 +27,8 @@ public class MapViewHelper {
     
     public static void setToCurrentLocation(MapView map, int zoomLevel, Location location) {
 
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
+        double latitude = location == null ?  0 : location.getLatitude();
+        double longitude = location == null ? 0 : location.getLongitude();
         
         System.out.println("Latitude: " + latitude);
         System.out.println("Longitude: " + longitude);

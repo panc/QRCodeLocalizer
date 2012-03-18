@@ -32,11 +32,11 @@ public class Settings {
     }
 
     public static String getUserName() {
-        return sPrefs.getString(USERNAME, "");
+        return sPrefs.getString(USERNAME, "api-test");
     }
 
     public static String getPassword() {
-        return sPrefs.getString(PASSWORD, "");
+        return sPrefs.getString(PASSWORD, "qraz");
     }
 
     public static void initialize(Context c) {

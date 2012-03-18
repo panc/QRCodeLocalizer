@@ -16,23 +16,27 @@ public class CodeLocation {
     private double _longitude;
     private double _latitude;
     private long _time;
-    
+
     private String _timeString;
     private String _qrCodeContents;
-    
+
+    public CodeLocation() {
+        _timeString = "";
+    }
+
     public CodeLocation(double longitude, double latitude, long time) {
         _longitude = longitude;
         _latitude = latitude;
         _time = time;
-        
+
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         _timeString = sdf.format(new Date(time));
     }
 
     public CodeLocation(String qrCodeContents, String json) {
-        
+
         _qrCodeContents = qrCodeContents;
-        
+
         if (json != null) {
             try {
                 JSONObject j = new JSONObject(json);
@@ -45,7 +49,7 @@ public class CodeLocation {
                     _longitude = Double.parseDouble(coordinates[0]);
                     _latitude = Double.parseDouble(coordinates[1]);
                 }
-                
+
                 _timeString = j.getString(KEY_TIME);
             }
             catch (JSONException e) {
@@ -65,7 +69,7 @@ public class CodeLocation {
     public String getTime() {
         return _timeString;
     }
-    
+
     public String getQRCodeContents() {
         return _qrCodeContents;
     }

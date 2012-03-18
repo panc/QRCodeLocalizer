@@ -73,7 +73,12 @@ public class Main extends MapActivity {
         MapViewHelper.initialize(_locationManager);
         Location l = _locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
 
-        _gpsLocation = new CodeLocation(l.getLongitude(), l.getLatitude(), l.getTime());
+        System.out.println("is null" + l == null);
+        
+        _gpsLocation = l == null
+            ? new CodeLocation()
+            : new CodeLocation(l.getLongitude(), l.getLatitude(), l.getTime());
+                
         setLocationText(_gpsLocationTextView, _gpsLocation);
 
         _mapView = (MapView) findViewById(R.id.smallMapView);
