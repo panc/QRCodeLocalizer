@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import at.qraz.qrcodelocalizer.CodeLocation;
@@ -29,11 +30,15 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class Main extends MapActivity {
 
-    private TextView _qrCodeContentsTextView;
-    private TextView _gpsLocationTextView;
-    private TextView _qrCodeLocationTextView;
     private MapView _mapView;
-
+    private TextView _gpsLocationTextView;
+    private TextView _qrCodeContentsTextView;
+    private TextView _qrCodeLocationTextView;
+    
+    private TextView _submitNewLocationHeadline;
+    private View _submitNewLocationLine;
+    private Button _submitNewLocationButton;
+    
     private LocationManager _locationManager;
 
     private CodeLocation _qrCodeLocation;
@@ -59,7 +64,10 @@ public class Main extends MapActivity {
         _gpsLocationTextView = (TextView) findViewById(R.id.gpsLocationTextView);
         _qrCodeLocationTextView = (TextView) findViewById(R.id.qrCodeLocationTextView);
         _qrCodeContentsTextView = (TextView) findViewById(R.id.qrCodeContentsTextView);
-        
+        _submitNewLocationHeadline = (TextView) findViewById(R.id.submitNewLocationHeadline);
+        _submitNewLocationLine = (View) findViewById(R.id.submitNewLocationLine);
+        _submitNewLocationButton = (Button) findViewById(R.id.submitNewLocationButton);
+
         _locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         MapViewHelper.initialize(_locationManager);
@@ -74,10 +82,14 @@ public class Main extends MapActivity {
         Object data = getLastNonConfigurationInstance();
         if (data != null && data instanceof CodeLocation) {
 
-            _qrCodeLocation = (CodeLocation)data;
-            _qrCodeContentsTextView.setText(_qrCodeLocation.getQRCodeContents());    
+            _qrCodeLocation = (CodeLocation) data;
+            _qrCodeContentsTextView.setText(_qrCodeLocation.getQRCodeContents());
+            
+            setSubmitRegionVisibility(true);
             setLocationText(_qrCodeLocationTextView, _qrCodeLocation);
         }
+        else
+            setSubmitRegionVisibility(false);
     }
 
     // pauses listener while app is inactive
@@ -152,7 +164,7 @@ public class Main extends MapActivity {
 
     public void submitNewLocationButtonClick(View v) {
         try {
-            if (_gpsLocation == null || _qrCodeLocation !=  null) {
+            if (_gpsLocation == null || _qrCodeLocation == null) {
                 showToast(getString(R.string.noDataForUpdate));
                 return;
             }
@@ -165,7 +177,10 @@ public class Main extends MapActivity {
             }
             else {
                 showToast(getString(R.string.updateSuccessful));
-                requestAndSetQRCodeLocation(_qrCodeLocation.getQRCodeContents());
+        
+                _qrCodeContentsTextView.setText("");
+                _qrCodeLocationTextView.setText("");
+                setSubmitRegionVisibility(false);
             }
 
         }
@@ -176,7 +191,9 @@ public class Main extends MapActivity {
     }
 
     public void scanButtonClick(View v) {
-        _qrCodeContentsTextView.setText("");        
+        _qrCodeContentsTextView.setText("");
+        _qrCodeLocationTextView.setText("");
+        
         IntentIntegrator.initiateScan(this);
     }
 
@@ -187,10 +204,13 @@ public class Main extends MapActivity {
         WebServiceClient ws = new WebServiceClient();
         _qrCodeLocation = ws.getQRCodeLocation(qrCodeContents);
 
-        if (_qrCodeLocation == null)
+        if (_qrCodeLocation == null){
             _qrCodeLocationTextView.setText(getString(R.string.requestFailed));
-        else
+        }
+        else{
             setLocationText(_qrCodeLocationTextView, _qrCodeLocation);
+            setSubmitRegionVisibility(true);
+        }
     }
 
     private void setLocationText(TextView view, CodeLocation loc) {
@@ -200,8 +220,16 @@ public class Main extends MapActivity {
 
         view.setText(text);
     }
+
+    private void setSubmitRegionVisibility(boolean visible) {
+        int color = getResources().getColor(visible ? R.color.headlineColor : R.color.textColor);
+        
+        _submitNewLocationLine.setBackgroundColor(color);
+        _submitNewLocationHeadline.setTextColor(color);
+        _submitNewLocationButton.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+    }
     
-    private void showToast(String message){
+    private void showToast(String message) {
         Toast.makeText(this, message, 5000).show();
     }
 

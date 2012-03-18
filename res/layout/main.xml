@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/BackgroundColor"
+    android:background="@color/backgroundColor"
     >
 
     <LinearLayout android:layout_margin="5dip"
@@ -27,7 +27,7 @@
 	    
 	    <TextView  
 		    android:id="@+id/gpsLocationTextView"
-		    android:textColor="@color/TextColor"
+		    android:textColor="@color/textColor"
 		    android:layout_marginLeft="3dip"
 	        android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content" />
@@ -67,7 +67,7 @@
 		    
 		    <TextView  
 			    android:id="@+id/qrCodeContentsTextView"
-			    android:textColor="@color/TextColor"
+			    android:textColor="@color/textColor"
 		    	android:layout_marginLeft="10dip"
 		    	android:layout_marginTop="10dip"
 		        android:layout_width="fill_parent" 
@@ -76,7 +76,7 @@
 		    
 		    <TextView  
 		        android:id="@+id/qrCodeLocationTextView"
-			    android:textColor="@color/TextColor"
+			    android:textColor="@color/textColor"
 		    	android:layout_marginLeft="3dip"
 		    	android:layout_marginTop="5dip"
 		        android:layout_width="fill_parent" 
@@ -95,17 +95,18 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"/>
 	    
-	    <View android:background="@color/headlineColor" 
+	    <View android:id="@+id/submitNewLocationLine" 
+	        android:background="@color/headlineColor" 
 	        android:layout_width = "fill_parent" 
 	        android:layout_height="1dip"
 	        android:layout_marginBottom="15dip"/>
 	    
-	     <Button
+	     <Button android:id="@+id/submitNewLocationButton"
 		    android:layout_width="wrap_content" 
 		    android:layout_height="wrap_content" 
 		    android:text="@string/submitNewLocationButtonText"
 		    android:onClick="submitNewLocationButtonClick" />
-	
+	     
 	</LinearLayout>
 	
 </ScrollView>
