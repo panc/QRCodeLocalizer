@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:layout_margin="5dip"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_vertical"
+    android:background="@color/backgroundColor" >
+   	
+    <TextView 
+        android:text="@string/developedBy"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:layout_marginTop="0dip"
+        android:layout_marginBottom="20dip"
+        android:gravity="center_horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
+    
+    <ImageView android:id="@+id/imageView"
+        android:contentDescription="@string/app_name" 
+        android:src="@drawable/logo"
+        android:gravity="center_horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:longClickable="true" />
+    
+    <TextView 
+        android:text="@string/devTeam"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:layout_marginTop="15dip"
+        android:layout_marginLeft="3dip"
+        android:gravity="center_horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
+    
+    <TextView android:id="@+id/staffTextView"
+        android:text="@string/staff"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_marginTop="30dip"
+        android:layout_marginLeft="3dip"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:focusable="true"
+		android:focusableInTouchMode="true"
+		android:marqueeRepeatLimit="100"
+		android:visibility="invisible"
+		android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
+    
+</LinearLayout>

@@ -138,7 +138,8 @@ public class Main extends MapActivity {
                 break;
 
             case R.id.aboutMenu:
-                Toast.makeText(this, R.string.aboutText, 2000).show();
+                Intent about = new Intent(this, AboutActivity.class);
+                startActivity(about);
                 break;
         }
 

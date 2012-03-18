@@ -23,6 +23,9 @@
     <string name="satellite">Satellite</string>
     <string name="map">Map</string>
     <string name="mapTypeSelection">Map-type selection</string>
+    <string name="developedBy">DEVELOPED BY</string>
+    <string name="devTeam">DEV-TEAM</string>
+    <string name="staff">Master of Web-Site Development:\tMichael F. \t\t-\t\t Head Of Graphical Design:\tOliver K. \t\t-\t\t Creative Art Director:\tFelix L. \t\t-\t\t Chief Mobile Device Programmer:\tChristoph P. \t\t-\t\t Head Of User-Interaction Design:\tChristian P. \t\t-\t\t Master Of Social Networking:\tThorsten Twittolinski</string>
     
     <string name="GoogleMapsAPIKey">0XDVMvfQ4hPX8iimvIVVZAON3c4WJ2KTQYkW1qA</string>
     <string name="GoogleMapsAPIKey_Debug">0XDVMvfQ4hPVZnUB8HFFRzNWo9Trv92xmbGuNHg</string>

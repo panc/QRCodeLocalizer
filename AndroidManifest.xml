@@ -18,6 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name="at.qraz.qrcodelocalizer.activity.SettingsActivity" android:label="@string/app_name" android:process="Main.Process"/>        
+        <activity android:name="at.qraz.qrcodelocalizer.activity.AboutActivity" android:label="@string/app_name" android:process="Main.Process"/>
         <activity android:name="at.qraz.qrcodelocalizer.activity.LocationPreviewActivity" android:label="@string/app_name" android:process="LargeMap.Preview"/>
     </application>
 </manifest>

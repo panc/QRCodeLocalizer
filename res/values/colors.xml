@@ -3,5 +3,5 @@
     <color name="headlineColor">#DE9918</color>
     <color name="backgroundColor">#333333</color>
     <color name="textColor">#B3B3B3</color>
-    
+    <color name="white">#FFFFFF</color>
 </resources>
