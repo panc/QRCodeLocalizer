@@ -56,8 +56,11 @@ public class WebServiceClient {
             HttpClient httpClient = new DefaultHttpClient();
             HttpResponse response = httpClient.execute(httpGet);
 
-            if (response.getStatusLine().getStatusCode() != HttpURLConnection.HTTP_OK)
+            if (response.getStatusLine().getStatusCode() != HttpURLConnection.HTTP_OK) {
+                System.out.println("Bad status-code: " +  response.getStatusLine());
+                System.out.println("Url: " + httpGet.getURI());
                 return null;
+            }
             
             HttpEntity entity = response.getEntity();
             StringBuilder sb = new StringBuilder();
@@ -95,6 +98,6 @@ public class WebServiceClient {
     private String createUrl(String qrCode) {
         // create the url to call for the update
         String id = qrCode.replace(Settings.getQrazUrl(), "");
-        return Settings.getAPIUrl() + id + "/";
+        return Settings.getAPIUrl() + id;
     }
 }

@@ -25,9 +25,14 @@ public class CodeLocation {
     }
 
     public CodeLocation(double longitude, double latitude, long time) {
+        this(longitude, latitude, time, "");
+    }
+    
+    public CodeLocation(double longitude, double latitude, long time, String contents) {
         _longitude = longitude;
         _latitude = latitude;
         _time = time;
+        _qrCodeContents = contents;
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         _timeString = sdf.format(new Date(time));

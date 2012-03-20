@@ -1,19 +1,25 @@
 package at.qraz.qrcodelocalizer.activity;
 
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import at.qraz.qrcodelocalizer.CodeLocation;
 import at.qraz.qrcodelocalizer.MapViewHelper;
+import at.qraz.qrcodelocalizer.QRCodeOverlay;
 import at.qraz.qrcodelocalizer.R;
 
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
+import com.google.android.maps.Overlay;
 
 public class LocationPreviewActivity extends MapActivity {
 
@@ -31,11 +37,21 @@ public class LocationPreviewActivity extends MapActivity {
         _mapView = (MapView) findViewById(R.id.largeMapView);
         _mapView.setBuiltInZoomControls(true);
 
-        MapViewHelper.initialize((LocationManager) getSystemService(LOCATION_SERVICE));
+        LocationManager manager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        
+        MapViewHelper.initialize(manager);
         MapViewHelper.setToCurrentLocation(_mapView, MapViewHelper.ZOOM_LEVEL_LARGE);
 
         _myLocationOverlay = new MyLocationOverlay(this, _mapView);
-        _mapView.getOverlays().add(_myLocationOverlay);
+        List<Overlay> overlays = _mapView.getOverlays();
+        overlays.add(_myLocationOverlay);
+        
+        Intent i = getIntent();
+        String content = i.getStringExtra("Content");
+        if(content != null) {
+            overlays.add(new QRCodeOverlay(this, new CodeLocation( i.getDoubleExtra("Longitude", 0), i.getDoubleExtra("Latitude", 0), 0, i.getStringExtra("Content"))));
+        }
+        
     }
 
     @Override
