@@ -7,6 +7,7 @@
     <string name="scanQRCodeHeadlineText">2. Scan QR-Code</string>
     <string name="settingsMenuText">Settings</string>
     <string name="aboutMenuText">Info</string>
+    <string name="backText">Back</string>
     <string name="aboutText">QR-Code Localizer powered by qraz.at!</string>
     <string name="addressSettings">Service - Settings</string>
     <string name="qrazUrlHint">QRAZ.AT URL</string>

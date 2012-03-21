@@ -29,4 +29,8 @@ public class AboutActivity extends Activity {
             }
         });
     }
+    
+    public void onBackButtonClick(View v){
+        this.finish();
+    }
 }
