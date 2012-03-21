@@ -7,7 +7,8 @@
     <string name="scanQRCodeHeadlineText">2. Scan QR-Code</string>
     <string name="settingsMenuText">Settings</string>
     <string name="aboutMenuText">Info</string>
-    <string name="backText">Back</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
     <string name="aboutText">QR-Code Localizer powered by qraz.at!</string>
     <string name="addressSettings">Service - Settings</string>
     <string name="qrazUrlHint">QRAZ.AT URL</string>
@@ -20,7 +21,6 @@
     <string name="requestFailed">Request failed :-(</string>
     <string name="submitNewLocationHeadlineText">3. Submit New Location</string>
     <string name="noDataForUpdate">No data for update available!</string>
-    <string name="locationPreviewText">Location Preview</string>
     <string name="satellite">Satellite</string>
     <string name="map">Map</string>
     <string name="mapTypeSelection">Map-type selection</string>

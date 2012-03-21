@@ -4,5 +4,6 @@
   
     <item android:id="@+id/toggleMapType"
     	android:title="@string/mapTypeSelection"
-    	android:icon="@android:drawable/ic_menu_preferences"/>
+    	android:icon="@drawable/ic_menu_compass"
+    	android:showAsAction="ifRoom|withText" />
 </menu>

@@ -2,6 +2,7 @@ package at.qraz.qrcodelocalizer.activity;
 
 import java.util.List;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -52,6 +53,9 @@ public class LocationPreviewActivity extends MapActivity {
             overlays.add(new QRCodeOverlay(this, new CodeLocation( i.getDoubleExtra("Longitude", 0), i.getDoubleExtra("Latitude", 0), 0, i.getStringExtra("Content"))));
         }
         
+        ActionBar bar = getActionBar();
+        bar.setHomeButtonEnabled(true);
+        bar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -87,6 +91,13 @@ public class LocationPreviewActivity extends MapActivity {
         switch (item.getItemId()) {
             case R.id.toggleMapType:
                 showDialog(DIALOG_SHOW_MAPTYPE_SELECTION);
+                break;
+                
+            case android.R.id.home:
+                // app icon in action bar clicked; go home
+                Intent intent = new Intent(this, Main.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 break;
         }
 

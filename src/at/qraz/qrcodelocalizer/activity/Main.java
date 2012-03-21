@@ -5,11 +5,15 @@ import java.net.HttpURLConnection;
 
 import org.apache.http.client.ClientProtocolException;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -90,6 +94,10 @@ public class Main extends MapActivity {
         }
         else
             setSubmitRegionVisibility(false);
+        
+        ActionBar bar = getActionBar();
+        bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
+        bar.setHomeButtonEnabled(false);
     }
 
     // pauses listener while app is inactive
@@ -111,27 +119,41 @@ public class Main extends MapActivity {
     public Object onRetainNonConfigurationInstance() {
         return _qrCodeLocation;
     }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.settingsMenu:
+                Intent i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+                break;
 
-    public void onMapButtonClick(View v) {
-        Intent map = new Intent(this, LocationPreviewActivity.class);
+            case R.id.locationPreviewMenu:
+                Intent map = new Intent(this, LocationPreviewActivity.class);
 
-        if (_qrCodeLocation != null) {
-            map.putExtra("Content", _qrCodeLocation.getQRCodeContents());
-            map.putExtra("Latitude", _qrCodeLocation.getLatitude());
-            map.putExtra("Longitude", _qrCodeLocation.getLongitude());
+                if (_qrCodeLocation != null) {
+                    map.putExtra("Content", _qrCodeLocation.getQRCodeContents());
+                    map.putExtra("Latitude", _qrCodeLocation.getLatitude());
+                    map.putExtra("Longitude", _qrCodeLocation.getLongitude());
+                }
+
+                startActivity(map);
+                break;
+
+            case R.id.aboutMenu:
+                Intent about = new Intent(this, AboutActivity.class);
+                startActivity(about);
+                break;
         }
 
-        startActivity(map);
-    }
-    
-    public void onSettingsButtonClick(View v) {
-        Intent i = new Intent(this, SettingsActivity.class);
-        startActivity(i);
-    }
-    
-    public void onAboutButtonClick(View v) {
-        Intent about = new Intent(this, AboutActivity.class);
-        startActivity(about);
+        return true;
     }
 
     @Override
