@@ -22,7 +22,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 
-public class LocationPreviewActivity extends MapActivity {
+public class QrCodeMapActivity extends MapActivity {
 
     private final int DIALOG_SHOW_MAPTYPE_SELECTION = 1;
     
@@ -33,7 +33,7 @@ public class LocationPreviewActivity extends MapActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.location_preview);
+        setContentView(R.layout.map);
 
         _mapView = (MapView) findViewById(R.id.largeMapView);
         _mapView.setBuiltInZoomControls(true);

@@ -136,7 +136,7 @@ public class Main extends MapActivity {
                 break;
 
             case R.id.locationPreviewMenu:
-                Intent map = new Intent(this, LocationPreviewActivity.class);
+                Intent map = new Intent(this, QrCodeMapActivity.class);
 
                 if (_qrCodeLocation != null) {
                     map.putExtra("Content", _qrCodeLocation.getQRCodeContents());
