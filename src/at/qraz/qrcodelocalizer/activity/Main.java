@@ -19,12 +19,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import at.qraz.qrcodelocalizer.CodeLocation;
-import at.qraz.qrcodelocalizer.MapViewHelper;
 import at.qraz.qrcodelocalizer.R;
 import at.qraz.qrcodelocalizer.Settings;
 import at.qraz.qrcodelocalizer.WebServiceClient;
+import at.qraz.qrcodelocalizer.view.MapViewEx;
 
+import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -41,6 +43,7 @@ public class Main extends MapActivity {
     private Button _submitNewLocationButton;
 
     private LocationManager _locationManager;
+    private MapController _controller;
 
     private CodeLocation _qrCodeLocation;
     private CodeLocation _gpsLocation;
@@ -70,18 +73,18 @@ public class Main extends MapActivity {
         _submitNewLocationButton = (Button) findViewById(R.id.submitNewLocationButton);
 
         _locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-        MapViewHelper.initialize(_locationManager);
         Location l = _locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-
-        System.out.println("is null" + l == null);
 
         _gpsLocation = l == null ? new CodeLocation() : new CodeLocation(l.getLongitude(), l.getLatitude(), l.getTime());
 
         setLocationText(_gpsLocationTextView, _gpsLocation);
 
         _mapView = (MapView) findViewById(R.id.smallMapView);
-        MapViewHelper.setToCurrentLocation(_mapView, MapViewHelper.ZOOM_LEVEL_SMALL);
+        _controller = _mapView.getController();
+        _controller.setZoom(MapViewEx.ZOOM_LEVEL_SMALL);
+
+        if (l != null)
+            _controller.setCenter(new GeoPoint((int) (l.getLatitude() * 1E6), (int) (l.getLongitude() * 1E6)));
 
         Object data = getLastNonConfigurationInstance();
         if (data != null && data instanceof CodeLocation) {
@@ -94,7 +97,7 @@ public class Main extends MapActivity {
         }
         else
             setSubmitRegionVisibility(false);
-        
+
         ActionBar bar = getActionBar();
         bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
         bar.setHomeButtonEnabled(false);
@@ -119,14 +122,14 @@ public class Main extends MapActivity {
     public Object onRetainNonConfigurationInstance() {
         return _qrCodeLocation;
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -254,7 +257,8 @@ public class Main extends MapActivity {
             _gpsLocation = new CodeLocation(loc.getLongitude(), loc.getLatitude(), loc.getTime());
             setLocationText(_gpsLocationTextView, _gpsLocation);
 
-            MapViewHelper.setToCurrentLocation(_mapView, MapViewHelper.ZOOM_LEVEL_SMALL, loc);
+            _controller.setZoom(MapViewEx.ZOOM_LEVEL_SMALL);
+            _controller.setCenter(new GeoPoint((int) (loc.getLatitude() * 1E6), (int) (loc.getLongitude() * 1E6)));
         }
 
         public void onProviderDisabled(String provider) {
