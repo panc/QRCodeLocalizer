@@ -2,7 +2,6 @@ package at.qraz.qrcodelocalizer.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import at.qraz.qrcodelocalizer.CodeLocation;
@@ -37,9 +36,6 @@ public class QRCodeOverlay extends Overlay {
         int top = position.y - height / 2;
         
         _icon.setBounds(left, top, left + width, top + height);
-        _icon.draw(canvas);
-        
-        canvas.drawText(_location.getQRCodeContents(), position.x, position.y, new Paint());
-        
+        _icon.draw(canvas);        
     }
 }

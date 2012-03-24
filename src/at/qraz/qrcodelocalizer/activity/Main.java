@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 
 import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
 
 import android.app.ActionBar;
 import android.content.Intent;
@@ -45,6 +46,7 @@ public class Main extends MapActivity {
     private LocationManager _locationManager;
     private MapController _controller;
 
+    private String _qrCodeContent;
     private CodeLocation _qrCodeLocation;
     private CodeLocation _gpsLocation;
 
@@ -87,10 +89,13 @@ public class Main extends MapActivity {
             _controller.setCenter(new GeoPoint((int) (l.getLatitude() * 1E6), (int) (l.getLongitude() * 1E6)));
 
         Object data = getLastNonConfigurationInstance();
-        if (data != null && data instanceof CodeLocation) {
+        if (data != null && data instanceof NonConfigurationInstanceObject) {
 
-            _qrCodeLocation = (CodeLocation) data;
-            _qrCodeContentsTextView.setText(_qrCodeLocation.getQRCodeContents());
+            NonConfigurationInstanceObject config = (NonConfigurationInstanceObject) data;
+            _qrCodeLocation = config.getLocation();
+            _qrCodeContent = config.getContent();
+            
+            _qrCodeContentsTextView.setText(_qrCodeContent);
 
             setSubmitRegionVisibility(true);
             setLocationText(_qrCodeLocationTextView, _qrCodeLocation);
@@ -142,7 +147,7 @@ public class Main extends MapActivity {
                 Intent map = new Intent(this, QrCodeMapActivity.class);
 
                 if (_qrCodeLocation != null) {
-                    map.putExtra("Content", _qrCodeLocation.getQRCodeContents());
+                    map.putExtra("Content", _qrCodeContent);
                     map.putExtra("Latitude", _qrCodeLocation.getLatitude());
                     map.putExtra("Longitude", _qrCodeLocation.getLongitude());
                 }
@@ -168,10 +173,10 @@ public class Main extends MapActivity {
                     showToast("Scanning Cancled!");
                 }
                 else if (result.getFormatName().equals(IntentIntegrator.QR_CODE_TYPES)) {
-                    String qrCodeContents = result.getContents();
-                    _qrCodeContentsTextView.setText(qrCodeContents);
+                    _qrCodeContent = result.getContents();
+                    _qrCodeContentsTextView.setText(_qrCodeContent);
 
-                    requestAndSetQRCodeLocation(qrCodeContents);
+                    requestAndSetQRCodeLocation(_qrCodeContent);
                 }
             }
         }
@@ -189,7 +194,7 @@ public class Main extends MapActivity {
             }
 
             WebServiceClient ws = new WebServiceClient();
-            int statusCode = ws.updateQRCodeLocation(_gpsLocation, _qrCodeLocation.getQRCodeContents());
+            int statusCode = ws.updateQRCodeLocation(_gpsLocation, _qrCodeContent);
 
             if (statusCode != HttpURLConnection.HTTP_OK) {
                 showToast(getString(R.string.updateFailed) + " (Status: " + statusCode + ")");
@@ -219,7 +224,7 @@ public class Main extends MapActivity {
     /*
      * reqest the current location of the qr-code from the server
      */
-    private void requestAndSetQRCodeLocation(String qrCodeContents) throws ClientProtocolException, IOException {
+    private void requestAndSetQRCodeLocation(String qrCodeContents) throws ClientProtocolException, IOException, JSONException {
         WebServiceClient ws = new WebServiceClient();
         _qrCodeLocation = ws.getQRCodeLocation(qrCodeContents);
 
@@ -273,4 +278,23 @@ public class Main extends MapActivity {
             // required for interface, not used
         }
     };
+    
+    private class NonConfigurationInstanceObject {
+        
+        private String _content;
+        private CodeLocation _location;
+        
+        private NonConfigurationInstanceObject(String content, CodeLocation location){
+            _content = content;
+            _location = location;
+        }
+        
+        public String getContent(){
+            return _content;
+        }
+        
+        public CodeLocation getLocation() {
+            return _location;
+        }
+    }
 }

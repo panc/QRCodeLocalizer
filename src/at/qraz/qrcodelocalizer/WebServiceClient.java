@@ -18,7 +18,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.util.Base64;
 
@@ -48,7 +50,7 @@ public class WebServiceClient {
         }
     }
 
-    public CodeLocation getQRCodeLocation(String qrCode) throws ClientProtocolException, IOException {
+    public CodeLocation getQRCodeLocation(String qrCode) throws ClientProtocolException, IOException, JSONException {
         HttpGet httpGet = null;
         try {
             httpGet = new HttpGet(createUrl(qrCode));
@@ -78,7 +80,7 @@ public class WebServiceClient {
                 instream.close();
             }
 
-            return new CodeLocation(qrCode, sb.toString());
+            return new CodeLocation(new JSONObject(sb.toString()));
         }
         finally {
             if (httpGet != null)
@@ -86,22 +88,36 @@ public class WebServiceClient {
         }
     }
 
-    public List<CodeLocation> getCodeLocationsForViewPoint(/* ?? Arguments unknown */) throws ClientProtocolException, IOException {
+    public List<CodeLocation> getCodeLocationsInArea(double topLeftX, double topLeftY, double topRightX, double topRightY, double bottomLeftX, double bottomLeftY, double bottomRightX, double bottomRightY) throws ClientProtocolException, IOException, JSONException {
+
         List<CodeLocation> locations = new ArrayList<CodeLocation>();
-        
+
         HttpGet httpGet = null;
         try {
-            httpGet = new HttpGet(createUrl("???"));
 
+            String polygon = topLeftY + "%20" + topLeftX + ",%20" + topRightY + "%20" + topRightX + ",%20" + bottomRightY + "%20" + bottomRightX + ",%20" + bottomLeftY + "%20" + bottomLeftX + ",%20" + topLeftY + "%20" + topLeftX;
+
+            String area = String.format("area=POLYGON((%s))", polygon);
+            String url = Settings.getAPIUrl() + "?" + area;
+
+            System.out.println(url);
+
+            httpGet = new HttpGet(url);
             addAuthorizationHeader(httpGet);
 
             HttpClient httpClient = new DefaultHttpClient();
             HttpResponse response = httpClient.execute(httpGet);
 
-            if (response.getStatusLine().getStatusCode() != HttpURLConnection.HTTP_OK) {
+            int status = response.getStatusLine().getStatusCode();
+            
+            if(status == HttpURLConnection.HTTP_NOT_FOUND)
+                // no code was found in the given area
+                return locations;
+            
+            if (status != HttpURLConnection.HTTP_OK) {
                 System.out.println("Bad status-code: " + response.getStatusLine());
                 System.out.println("Url: " + httpGet.getURI());
-                return null;
+                return locations;
             }
 
             HttpEntity entity = response.getEntity();
@@ -118,14 +134,17 @@ public class WebServiceClient {
                 instream.close();
             }
 
-            // JSONArray array = new JSONArray(sb.toString());
-            // create list from reult...
+            JSONArray array = new JSONArray(sb.toString());
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject json = array.getJSONObject(i);
+                locations.add(new CodeLocation(json));
+            }
         }
         finally {
             if (httpGet != null)
                 httpGet.abort();
         }
-        
+
         return locations;
     }
 

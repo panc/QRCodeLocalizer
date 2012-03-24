@@ -15,16 +15,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import at.qraz.qrcodelocalizer.CodeLocation;
 import at.qraz.qrcodelocalizer.R;
+import at.qraz.qrcodelocalizer.Settings;
 import at.qraz.qrcodelocalizer.WebServiceClient;
 import at.qraz.qrcodelocalizer.view.MapViewEx;
 import at.qraz.qrcodelocalizer.view.QRCodeOverlay;
-import at.qraz.qrcodelocalizer.view.ZoomLevelChangedListener;
+import at.qraz.qrcodelocalizer.view.MapAreaChangedListener;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
+import com.google.android.maps.Projection;
 
 public class QrCodeMapActivity extends MapActivity {
 
@@ -32,7 +34,6 @@ public class QrCodeMapActivity extends MapActivity {
 
     private MyLocationOverlay _myLocationOverlay;
     private MapViewEx _mapView;
-    private int _minZoomLevel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,33 +41,30 @@ public class QrCodeMapActivity extends MapActivity {
 
         setContentView(R.layout.qrcodemap);
 
+        Settings.initialize(this);
+
         _mapView = (MapViewEx) findViewById(R.id.largeMapView);
         _mapView.setBuiltInZoomControls(true);
 
-        _mapView.setZoomLevelChangedListener(new ZoomLevelChangedListener() {
+        _mapView.setMapAreaChangedListener(new MapAreaChangedListener() {
 
             @Override
-            public void zoomLevelChanged(int newZoomLevel) {
+            public void mapAreaChanged(int newZoomLevel) {
+                System.out.println("zoom changed");
                 loadQrCodesForChangedZoomLevel(newZoomLevel);
             }
         });
 
         LocationManager manager = (LocationManager) getSystemService(LOCATION_SERVICE);
         Location l = manager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-        
+
         MapController controller = _mapView.getController();
         controller.setZoom(MapViewEx.ZOOM_LEVEL_LARGE);
         controller.setCenter(new GeoPoint((int) (l.getLatitude() * 1E6), (int) (l.getLongitude() * 1E6)));
-        
+
         _myLocationOverlay = new MyLocationOverlay(this, _mapView);
         List<Overlay> overlays = _mapView.getOverlays();
         overlays.add(_myLocationOverlay);
-
-        Intent i = getIntent();
-        String content = i.getStringExtra("Content");
-        if (content != null) {
-            overlays.add(new QRCodeOverlay(this, new CodeLocation(i.getDoubleExtra("Longitude", 0), i.getDoubleExtra("Latitude", 0), 0, i.getStringExtra("Content"))));
-        }
 
         ActionBar bar = getActionBar();
         bar.setHomeButtonEnabled(true);
@@ -151,17 +149,29 @@ public class QrCodeMapActivity extends MapActivity {
     }
 
     protected void loadQrCodesForChangedZoomLevel(int newZoomLevel) {
-        if (newZoomLevel < _minZoomLevel) {
+        System.out.println("zoomLevel: " + newZoomLevel);
 
-            try {
-                WebServiceClient wsClient = new WebServiceClient();
-                wsClient.getCodeLocationsForViewPoint(/* ??? */);
+        try {
+            Projection projection = _mapView.getProjection();
+            GeoPoint topLeft = projection.fromPixels(0, 0);
+            GeoPoint topRight = projection.fromPixels(_mapView.getWidth(), 0);
+            GeoPoint bottomLeft = projection.fromPixels(0, _mapView.getHeight());
+            GeoPoint bottomRight = projection.fromPixels(_mapView.getWidth(), _mapView.getHeight());
 
-                _minZoomLevel = newZoomLevel;
-            }
-            catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            WebServiceClient wsClient = new WebServiceClient();
+            List<CodeLocation> locations = wsClient.getCodeLocationsInArea(convertToDouble(topLeft.getLatitudeE6()), convertToDouble(topLeft.getLongitudeE6()), convertToDouble(topRight.getLatitudeE6()), convertToDouble(topRight.getLongitudeE6()), convertToDouble(bottomLeft.getLatitudeE6()), convertToDouble(bottomLeft.getLongitudeE6()), convertToDouble(bottomRight.getLatitudeE6()), convertToDouble(bottomRight.getLongitudeE6()));
+            
+            System.out.println("Count: " + locations.size());
+            
+            for(CodeLocation l : locations)
+                _mapView.getOverlays().add(new QRCodeOverlay(this, l));
         }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private double convertToDouble(int value) {
+        return (double) value / 1E6;
     }
 }

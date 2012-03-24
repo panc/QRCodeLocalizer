@@ -12,26 +12,28 @@ public class MapViewEx extends MapView {
     public static final int ZOOM_LEVEL_LARGE = 18;
     
     private int _zoomLevel = -1;
-    private ZoomLevelChangedListener _zoomLevelChangedListener;
+    private MapAreaChangedListener _mapAreaChangedListener;
 
     public MapViewEx(Context arg0, AttributeSet arg1) {
         super(arg0, arg1);
     }
 
-    public void setZoomLevelChangedListener(ZoomLevelChangedListener listener) {
-        _zoomLevelChangedListener = listener;
+    public void setMapAreaChangedListener(MapAreaChangedListener listener) {
+        _mapAreaChangedListener = listener;
     }
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
-
+        
         int zoomLevel = getZoomLevel();
         if (zoomLevel != _zoomLevel) {
             _zoomLevel = zoomLevel;
-
-            if (_zoomLevelChangedListener != null)
-                _zoomLevelChangedListener.zoomLevelChanged(_zoomLevel);
+            
+            if (_mapAreaChangedListener != null)
+                _mapAreaChangedListener.mapAreaChanged(_zoomLevel);
         }
+        
+        // TODO: notify listener when user moves the map (center)
     }
 }
