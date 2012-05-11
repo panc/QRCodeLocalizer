@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -55,13 +56,16 @@ public class QrCodeMapActivity extends MapActivity {
             }
         });
 
+        Log.d("DD", "Test");
         LocationManager manager = (LocationManager) getSystemService(LOCATION_SERVICE);
         Location l = manager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
 
-        MapController controller = _mapView.getController();
-        controller.setZoom(MapViewEx.ZOOM_LEVEL_LARGE);
-        controller.setCenter(new GeoPoint((int) (l.getLatitude() * 1E6), (int) (l.getLongitude() * 1E6)));
-
+        if (l != null) {
+            MapController controller = _mapView.getController();
+            controller.setZoom(MapViewEx.ZOOM_LEVEL_LARGE);
+            controller.setCenter(new GeoPoint((int) (l.getLatitude() * 1E6), (int) (l.getLongitude() * 1E6)));
+        }
+        
         _myLocationOverlay = new MyLocationOverlay(this, _mapView);
         List<Overlay> overlays = _mapView.getOverlays();
         overlays.add(_myLocationOverlay);
@@ -160,10 +164,10 @@ public class QrCodeMapActivity extends MapActivity {
 
             WebServiceClient wsClient = new WebServiceClient();
             List<CodeLocation> locations = wsClient.getCodeLocationsInArea(convertToDouble(topLeft.getLatitudeE6()), convertToDouble(topLeft.getLongitudeE6()), convertToDouble(topRight.getLatitudeE6()), convertToDouble(topRight.getLongitudeE6()), convertToDouble(bottomLeft.getLatitudeE6()), convertToDouble(bottomLeft.getLongitudeE6()), convertToDouble(bottomRight.getLatitudeE6()), convertToDouble(bottomRight.getLongitudeE6()));
-            
+
             System.out.println("Count: " + locations.size());
-            
-            for(CodeLocation l : locations)
+
+            for (CodeLocation l : locations)
                 _mapView.getOverlays().add(new QRCodeOverlay(this, l));
         }
         catch (Exception ex) {
