@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
+import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 
 public class MapViewEx extends MapView {
@@ -13,9 +14,12 @@ public class MapViewEx extends MapView {
     
     private int _zoomLevel = -1;
     private MapAreaChangedListener _mapAreaChangedListener;
+    private GeoPoint _mapCenter;
 
     public MapViewEx(Context arg0, AttributeSet arg1) {
         super(arg0, arg1);
+        
+        _mapCenter = getMapCenter();
     }
 
     public void setMapAreaChangedListener(MapAreaChangedListener listener) {
@@ -28,12 +32,24 @@ public class MapViewEx extends MapView {
         
         int zoomLevel = getZoomLevel();
         if (zoomLevel != _zoomLevel) {
-            _zoomLevel = zoomLevel;
+            System.out.println("Zoomlevel changed...");
             
-            if (_mapAreaChangedListener != null)
-                _mapAreaChangedListener.mapAreaChanged(_zoomLevel);
+            _zoomLevel = zoomLevel;
+            notifyListener();
+            return;
         }
         
-        // TODO: notify listener when user moves the map (center)
+        GeoPoint center = getMapCenter();
+        if(_mapCenter.getLatitudeE6() != center.getLatitudeE6() || _mapCenter.getLongitudeE6() != center.getLongitudeE6()) {
+            System.out.println("Location changed...");
+            
+            _mapCenter = center;
+            notifyListener();
+        }
+    }
+    
+    private void notifyListener() {
+        if (_mapAreaChangedListener != null)
+            _mapAreaChangedListener.mapAreaChanged(_zoomLevel);
     }
 }

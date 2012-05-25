@@ -38,4 +38,9 @@ public class QRCodeOverlay extends Overlay {
         _icon.setBounds(left, top, left + width, top + height);
         _icon.draw(canvas);        
     }
+    
+    public CodeLocation getLocation() {
+        return _location;
+    }
+
 }

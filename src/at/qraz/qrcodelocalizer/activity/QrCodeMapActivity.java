@@ -188,9 +188,26 @@ public class QrCodeMapActivity extends MapActivity {
             protected void onPostExecute(java.util.List<CodeLocation> locations) {
                 System.out.println("Count: " + locations.size());
 
+                List<Overlay> overlays =_mapView.getOverlays();    
+                
                 for (CodeLocation l : locations)
-                    _mapView.getOverlays().add(new QRCodeOverlay(_context, l));
+                    addOverlayIfNeeded(overlays, l);
+                
+                //_mapView.invalidate();
             };
+            
+            private void addOverlayIfNeeded(List<Overlay> overlays, CodeLocation location){
+                for (Overlay overlay : overlays){
+                    if(!(overlay instanceof QRCodeOverlay))
+                        continue;
+                    
+                    CodeLocation l = ((QRCodeOverlay)overlay).getLocation();
+                    if(l.getLatitude() == location.getLatitude() && l.getLongitude() == location.getLongitude())
+                        return; // code already added
+                }                    
+                
+                overlays.add(new QRCodeOverlay(_context, location));
+            }
             
             private double convertToDouble(int value) {
                 return (double) value / 1E6;
