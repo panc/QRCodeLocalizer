@@ -21,7 +21,7 @@ public class QRCodeOverlay extends Overlay {
     public QRCodeOverlay(Context context, CodeLocation location) {
         _context = context;
         _location = location;
-        _icon = _context.getResources().getDrawable(R.drawable.icon);
+        _icon = _context.getResources().getDrawable(R.drawable.location_marker);
     }
     
     @Override
@@ -33,7 +33,7 @@ public class QRCodeOverlay extends Overlay {
         int height = _icon.getMinimumHeight();
         
         int left = position.x - width / 2;
-        int top = position.y - height / 2;
+        int top = position.y - height;
         
         _icon.setBounds(left, top, left + width, top + height);
         _icon.draw(canvas);        

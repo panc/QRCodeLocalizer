@@ -1,14 +1,17 @@
 package at.qraz.qrcodelocalizer.activity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -65,7 +68,7 @@ public class QrCodeMapActivity extends MapActivity {
             controller.setZoom(MapViewEx.ZOOM_LEVEL_LARGE);
             controller.setCenter(new GeoPoint((int) (l.getLatitude() * 1E6), (int) (l.getLongitude() * 1E6)));
         }
-        
+
         _myLocationOverlay = new MyLocationOverlay(this, _mapView);
         List<Overlay> overlays = _mapView.getOverlays();
         overlays.add(_myLocationOverlay);
@@ -155,27 +158,44 @@ public class QrCodeMapActivity extends MapActivity {
     protected void loadQrCodesForChangedZoomLevel(int newZoomLevel) {
         System.out.println("zoomLevel: " + newZoomLevel);
 
-        try {
-            Projection projection = _mapView.getProjection();
-            GeoPoint topLeft = projection.fromPixels(0, 0);
-            GeoPoint topRight = projection.fromPixels(_mapView.getWidth(), 0);
-            GeoPoint bottomLeft = projection.fromPixels(0, _mapView.getHeight());
-            GeoPoint bottomRight = projection.fromPixels(_mapView.getWidth(), _mapView.getHeight());
+        new AsyncTask<Context, Integer, List<CodeLocation>>() {
+            
+            private Context _context;
+            
+            @Override
+            protected List<CodeLocation> doInBackground(Context... params) {
 
-            WebServiceClient wsClient = new WebServiceClient();
-            List<CodeLocation> locations = wsClient.getCodeLocationsInArea(convertToDouble(topLeft.getLatitudeE6()), convertToDouble(topLeft.getLongitudeE6()), convertToDouble(topRight.getLatitudeE6()), convertToDouble(topRight.getLongitudeE6()), convertToDouble(bottomLeft.getLatitudeE6()), convertToDouble(bottomLeft.getLongitudeE6()), convertToDouble(bottomRight.getLatitudeE6()), convertToDouble(bottomRight.getLongitudeE6()));
+                _context = params[0];
+                
+                try {
+                    Projection projection = _mapView.getProjection();
+                    GeoPoint topLeft = projection.fromPixels(0, 0);
+                    GeoPoint topRight = projection.fromPixels(_mapView.getWidth(), 0);
+                    GeoPoint bottomLeft = projection.fromPixels(0, _mapView.getHeight());
+                    GeoPoint bottomRight = projection.fromPixels(_mapView.getWidth(), _mapView.getHeight());
 
-            System.out.println("Count: " + locations.size());
+                    WebServiceClient wsClient = new WebServiceClient();
+                    return wsClient.getCodeLocationsInArea(convertToDouble(topLeft.getLatitudeE6()), convertToDouble(topLeft.getLongitudeE6()), convertToDouble(topRight.getLatitudeE6()), convertToDouble(topRight.getLongitudeE6()), convertToDouble(bottomLeft.getLatitudeE6()), convertToDouble(bottomLeft.getLongitudeE6()), convertToDouble(bottomRight.getLatitudeE6()), convertToDouble(bottomRight.getLongitudeE6()));
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                
+                return new ArrayList<CodeLocation>();
+            }
+            
+            @Override
+            protected void onPostExecute(java.util.List<CodeLocation> locations) {
+                System.out.println("Count: " + locations.size());
 
-            for (CodeLocation l : locations)
-                _mapView.getOverlays().add(new QRCodeOverlay(this, l));
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private double convertToDouble(int value) {
-        return (double) value / 1E6;
+                for (CodeLocation l : locations)
+                    _mapView.getOverlays().add(new QRCodeOverlay(_context, l));
+            };
+            
+            private double convertToDouble(int value) {
+                return (double) value / 1E6;
+            }
+            
+        }.execute(this);
     }
 }
