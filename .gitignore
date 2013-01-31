@@ -3,3 +3,6 @@
 /Android/gen
 /WindowsPhone/bin
 /WindowsPhone/QRCodeLocalizer/obj
+/WindowsPhone/*.suo
+
+/WindowsPhone/QRCodeLocalizer/*.user
