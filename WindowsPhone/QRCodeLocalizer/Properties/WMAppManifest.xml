@@ -5,7 +5,7 @@
     <Language code="en-US" />
     <Language code="de-AT" />
   </Languages>
-  <App xmlns="" ProductID="{4a5b18b4-5a7b-4123-a6c2-ae547ceebfe3}" Title="QR-Code Localizer" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Christoph Pangerl" Description="WindowsPhone App to localize qr-codes for qraz.at" Publisher="qraz.at" PublisherID="{0e6824e4-b4e1-4f14-94c6-fcd1ee00e404}">
+  <App xmlns="" ProductID="{4a5b18b4-5a7b-4123-a6c2-ae547ceebfe3}" Title="QR-Code Localizer" RuntimeType="Silverlight" Version="0.1.0.0" Genre="apps.normal" Author="Christoph Pangerl" Description="WindowsPhone App to localize qr-codes for qraz.at" Publisher="qraz.at" PublisherID="{0e6824e4-b4e1-4f14-94c6-fcd1ee00e404}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_NETWORKING" />
@@ -24,11 +24,9 @@
           <SmallImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileSmall.png</SmallImageURI>
           <Count>0</Count>
           <BackgroundImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileMedium.png</BackgroundImageURI>
-          <Title>QRCodeLocalizer</Title>
-          <BackContent></BackContent>
-          <BackBackgroundImageURI></BackBackgroundImageURI>
-          <BackTitle></BackTitle>
-          <DeviceLockImageURI></DeviceLockImageURI>
+          <Title>QR-Code Localizer</Title>
+          <BackBackgroundImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileMedium.png</BackBackgroundImageURI>
+          <BackTitle>powered by QRAZ.AT</BackTitle>
           <HasLarge>False</HasLarge>
         </TemplateFlip>
       </PrimaryToken>
